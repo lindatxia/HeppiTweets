@@ -32,10 +32,10 @@ def getTweetList():
 		def my_callback_closure(current_ts_instance): # accepts ONE argument: an instance of TwitterSearch
 			queries, tweets_seen = current_ts_instance.get_statistics()
 			if queries > 0 and (queries % 5) == 0: # trigger delay every 5th query
-				time.sleep(18000)
+				return tweetList
 
 		for tweet in ts.search_tweets_iterable(tso, callback=my_callback_closure):
-			print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
+			#print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
 			tweetList.append(tweet)
 
 	except TwitterSearchException as e: 
@@ -46,12 +46,15 @@ def getTweetList():
 
 # Connects to the Twitter Python Wrapper API
 def connect():
-    return Twitter(auth=OAuth(access_token, access_secret, consumer_key, consumer_secret))
+    return Twitter(auth=OAuth(access_token, access_secret, consumer_key, consumer_secret),retry=True)
 
 
+def main(): 
+	api = connect()
+	tweetList = getTweetList() 
+	print(tweetList)
+
+main()
 # Call this every 5 minutes
-api = connect()
 # api.statuses.update(status=)
-
-tw = getTweetList()
 

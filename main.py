@@ -17,7 +17,7 @@ def getTweetList():
 	tweetList = []
 	try:
 		tso = TwitterSearchOrder() 
-		tso.set_keywords(['Blessed','-Giveaway','Happy', 'Surprise', 'Believe', 'Positive', 'Celebrate', 'Engaged', 'Holidays', 'Beautiful', 'Nature', 'Love'],or_operator = True) # let's define all words we would like to have a look for
+		tso.set_keywords(['Blessed','-Giveaway','Happy', 'Surprise', 'Love'],or_operator = True) # let's define all words we would like to have a look for
 		tso.set_language('en') 
 		tso.set_include_entities(False) 
 		tso.set_positive_attitude_filter()
@@ -56,6 +56,8 @@ def main():
 
 	# Get a random one from the tweetList
 	rand = randint(0,len(tweetList)-1)
+
+	print('@%s tweeted: %s' % ( tweetList[rand]['user']['screen_name'], tweetList[rand]['text'] ))
 
 	api.statuses.update(status='@%s tweeted: %s' % ( tweetList[rand]['user']['screen_name'], tweetList[rand]['text'] ))
 

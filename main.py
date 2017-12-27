@@ -16,9 +16,6 @@ access_secret = data["access_secret"]
 def getTweetList():
 	tweetList = []
 	try:
-		tuo = TwitterUserOrder("some_user")
-		tuo.set_include_rts(False)
-		querystr = tuo.create_search_url()
 
 		tso = TwitterSearchOrder() 
 		tso.set_keywords(['Blessed','Happy', 'Surprise', 'Love'],or_operator = True)
@@ -27,8 +24,13 @@ def getTweetList():
 		tso.set_include_entities(False) 
 		tso.set_positive_attitude_filter()
 		tso.remove_link_filter()
+		querystr = tso.create_search_url()
 
-		tso.set_search_url(querystr + tso.create_search_url())
+		tuo = TwitterUserOrder("some_user")
+		tuo.set_include_rts(False)
+		print(tuo.create_search_url())
+
+		tso.set_search_url(querystr)
 
 		ts = TwitterSearch(
 			consumer_key = data["consumer_key"],
@@ -42,8 +44,8 @@ def getTweetList():
 			if queries > 0 and (queries % 5) == 0: # Trigger delay every 5th query
 				return tweetList
 
-		for tweet in ts.search_tweets_iterable(tso, callback=my_callback_closure):
-			print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
+		for tweet in ts.search_tweets_iterable(tuo, callback=my_callback_closure):
+			#print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
 			tweetList.append(tweet)
 
 	except TwitterSearchException as e: 

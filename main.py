@@ -26,11 +26,7 @@ def getTweetList():
 		tso.remove_link_filter()
 		querystr = tso.create_search_url()
 
-		tuo = TwitterUserOrder("some_user")
-		tuo.set_include_rts(False)
-		print(tuo.create_search_url())
-
-		tso.set_search_url(querystr)
+		tso.set_search_url(querystr + "&include_rts=false&lang=en%3Fcount%3D200&include_entities=false&exclude_replies=true")
 
 		ts = TwitterSearch(
 			consumer_key = data["consumer_key"],
@@ -44,8 +40,8 @@ def getTweetList():
 			if queries > 0 and (queries % 5) == 0: # Trigger delay every 5th query
 				return tweetList
 
-		for tweet in ts.search_tweets_iterable(tuo, callback=my_callback_closure):
-			#print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
+		for tweet in ts.search_tweets_iterable(tso, callback=my_callback_closure):
+			print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
 			tweetList.append(tweet)
 
 	except TwitterSearchException as e: 
@@ -65,10 +61,8 @@ def main():
 
 	# Get a random one from the tweetList
 	rand = randint(0,len(tweetList)-1)
-
 	print('@%s tweeted: %s' % ( tweetList[rand]['user']['screen_name'], tweetList[rand]['text'] ))
-
-	api.statuses.update(status='@%s -%s' % (tweetList[rand]['text'], tweetList[rand]['user']['screen_name'] ))
+	api.statuses.update(status='%s (Src: @%s)' % (tweetList[rand]['text'], tweetList[rand]['user']['screen_name'] ))
 
 # Call this every hour
 main()

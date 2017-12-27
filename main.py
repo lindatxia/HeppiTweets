@@ -18,6 +18,7 @@ def getTweetList():
 	try:
 		tso = TwitterSearchOrder() 
 		tso.set_keywords(['Blessed','Happy', 'Surprise', 'Love'],or_operator = True)
+		tso.add_keyword('#Blessed')
 		tso.set_language('en') 
 		tso.set_include_entities(False) 
 		tso.set_positive_attitude_filter()
@@ -36,7 +37,7 @@ def getTweetList():
 				return tweetList
 
 		for tweet in ts.search_tweets_iterable(tso, callback=my_callback_closure):
-			#print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
+			print( '@%s tweeted: %s' % ( tweet['user']['screen_name'], tweet['text'] ) )
 			tweetList.append(tweet)
 
 	except TwitterSearchException as e: 

@@ -20,7 +20,8 @@ def getTweetList():
 		tso.set_keywords(['Blessed','Happy', 'Surprise', 'Love'],or_operator = True)
 		tso.set_language('en') 
 		tso.set_include_entities(False) 
-	
+		tso.set_positive_attitude_filter()
+		tso.remove_link_filter()
 
 		ts = TwitterSearch(
 			consumer_key = data["consumer_key"],

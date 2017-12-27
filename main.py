@@ -17,11 +17,10 @@ def getTweetList():
 	tweetList = []
 	try:
 		tso = TwitterSearchOrder() 
-		tso.set_keywords(['Blessed','-Giveaway','Happy', 'Surprise', 'Love'],or_operator = True) # let's define all words we would like to have a look for
+		tso.set_keywords(['Blessed','Happy', 'Surprise', 'Love'],or_operator = True)
 		tso.set_language('en') 
 		tso.set_include_entities(False) 
-		tso.set_positive_attitude_filter()
-		tso.remove_link_filter()
+	
 
 		ts = TwitterSearch(
 			consumer_key = data["consumer_key"],
@@ -59,7 +58,7 @@ def main():
 
 	print('@%s tweeted: %s' % ( tweetList[rand]['user']['screen_name'], tweetList[rand]['text'] ))
 
-	api.statuses.update(status='@%s tweeted: %s' % ( tweetList[rand]['user']['screen_name'], tweetList[rand]['text'] ))
+	api.statuses.update(status=tweetList[rand]['text'] )
 
 # Call this every hour
 main()

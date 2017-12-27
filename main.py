@@ -1,6 +1,7 @@
 from twitter import *
 from TwitterSearch import *
 import json
+from random import randint
 import time
 with open('config.json') as data: 
 	data = json.load(data)
@@ -16,7 +17,7 @@ def getTweetList():
 	tweetList = []
 	try:
 		tso = TwitterSearchOrder() 
-		tso.set_keywords(['Blessed', 'Happy', 'Surprise', 'Believe', 'Positive', 'Celebrate', 'Engaged', 'Offer', 'Holidays', 'Beautiful', 'Nature', 'Love'],or_operator = True) # let's define all words we would like to have a look for
+		tso.set_keywords(['Blessed','-Giveaway','Happy', 'Surprise', 'Believe', 'Positive', 'Celebrate', 'Engaged', 'Holidays', 'Beautiful', 'Nature', 'Love'],or_operator = True) # let's define all words we would like to have a look for
 		tso.set_language('en') 
 		tso.set_include_entities(False) 
 		tso.set_positive_attitude_filter()
@@ -29,9 +30,9 @@ def getTweetList():
 			access_token_secret = data["access_secret"]
 		)
 
-		def my_callback_closure(current_ts_instance): # accepts ONE argument: an instance of TwitterSearch
+		def my_callback_closure(current_ts_instance): # Accepts an instance of TwitterSearch
 			queries, tweets_seen = current_ts_instance.get_statistics()
-			if queries > 0 and (queries % 5) == 0: # trigger delay every 5th query
+			if queries > 0 and (queries % 5) == 0: # Trigger delay every 5th query
 				return tweetList
 
 		for tweet in ts.search_tweets_iterable(tso, callback=my_callback_closure):
@@ -46,15 +47,19 @@ def getTweetList():
 
 # Connects to the Twitter Python Wrapper API
 def connect():
-    return Twitter(auth=OAuth(access_token, access_secret, consumer_key, consumer_secret),retry=True)
+    return Twitter(auth=OAuth(access_token, access_secret, consumer_key, consumer_secret))
 
 
 def main(): 
 	api = connect()
 	tweetList = getTweetList() 
-	print(tweetList)
 
+	# Get a random one from the tweetList
+	rand = randint(0,len(tweetList)-1)
+
+	api.statuses.update(status='@%s tweeted: %s' % ( tweetList[rand]['user']['screen_name'], tweetList[rand]['text'] ))
+
+# Call this every hour
 main()
-# Call this every 5 minutes
-# api.statuses.update(status=)
+
 

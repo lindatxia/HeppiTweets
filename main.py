@@ -18,8 +18,8 @@ def getTweetList():
 	try:
 
 		tso = TwitterSearchOrder() 
-		tso.set_keywords(['Blessed','Happy', 'Surprise', 'Love'],or_operator = True)
-		tso.add_keyword('blessed')
+		tso.set_keywords(['Blessed','Happy', 'Surprise', 'Love', '-:('],or_operator = True)
+		tso.add_keyword('happy')
 		tso.set_language('en') 
 		tso.set_include_entities(False) 
 		tso.set_positive_attitude_filter()
